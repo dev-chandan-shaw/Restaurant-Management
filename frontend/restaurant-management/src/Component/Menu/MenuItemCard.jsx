@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getMenuItems } from "../../Backend/config";
+import { addOrderItem, getMenuItems } from "../../Backend/config";
 import { useParams } from "react-router-dom";
 
 const MenuItemCard = () => {
@@ -15,6 +15,11 @@ const MenuItemCard = () => {
     const response = await getMenuItems(menutitle);
     setItems(response?.data);
   };
+
+  const addOrder = async (orderItem) => {
+    const response = await addOrderItem(orderItem);
+    console.log(response);
+  }
 
   return (
     <div className="my-10 grid  grid-cols-2 md:grid-cols-4 place-items-center">
@@ -41,9 +46,9 @@ const MenuItemCard = () => {
               <p className="text-lg md:text-xl py-1 text-cente font-semibold">
                 Price : ${item.price}
               </p>
-              <p className="bg-orange-600 cursor-pointer text-white px-3 py-1 rounded-md font-bold text-center">
+              <button onClick= {() => addOrder(item.id)} className="bg-orange-600 cursor-pointer text-white px-3 py-1 rounded-md font-bold text-center">
                 Add+
-              </p>
+              </button>
             </div>
           </div>
         </div>

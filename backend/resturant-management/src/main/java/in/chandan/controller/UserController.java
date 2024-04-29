@@ -1,4 +1,6 @@
 package in.chandan.controller;
+import in.chandan.entity.Orders;
+import in.chandan.repository.OrdersRepository;
 import in.chandan.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize; 
@@ -31,6 +33,9 @@ public class UserController {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 
+	@Autowired
+	private OrdersRepository ordersRepository;
+
 	@GetMapping("/welcome") 
 	public List<UserInfo> welcome() {
 		return userInfoRepository.findAll();
@@ -38,6 +43,9 @@ public class UserController {
 
 	@PostMapping("/signup")
 	public String addNewUser(@RequestBody UserInfo userInfo) {
+		Orders orders = new Orders();
+		ordersRepository.save(orders);
+		userInfo.setOrders(orders);
 		userInfo.setRoles("ROLE_USER");
 		return service.addUser(userInfo); 
 	} 
@@ -60,7 +68,7 @@ public class UserController {
 		if (authentication.isAuthenticated()) {
 
 			UserInfo user = userInfoRepository.findByEmail(authRequest.getEmail()).orElseThrow();
-			String token = jwtService.generateToken(user.getName(), authentication.getAuthorities());
+			String token = jwtService.generateToken(user.getEmail(), authentication.getAuthorities());
 			return Map.of("token", token , "userData", user);
 		} else {
 			throw new UsernameNotFoundException("invalid user request !");

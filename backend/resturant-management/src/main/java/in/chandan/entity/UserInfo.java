@@ -1,8 +1,5 @@
 package in.chandan.entity;
-import jakarta.persistence.Entity; 
-import jakarta.persistence.GeneratedValue; 
-import jakarta.persistence.GenerationType; 
-import jakarta.persistence.Id; 
+import jakarta.persistence.*;
 
 @Entity
 public class UserInfo { 
@@ -14,6 +11,10 @@ public class UserInfo {
 	private String email; 
 	private String password; 
 	private String roles;
+
+	@OneToOne
+	@JoinColumn(name = "orders", referencedColumnName = "id")
+	private Orders orders;
 	public int getId() {
 		return id;
 	}
@@ -43,6 +44,18 @@ public class UserInfo {
 	}
 	public void setRoles(String roles) {
 		this.roles = roles;
+	}
+
+	public Orders getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Orders orders) {
+		this.orders = orders;
+	}
+
+	public UserInfo() {
+		this.roles = "ROLE_USER";
 	}
 
 	@Override

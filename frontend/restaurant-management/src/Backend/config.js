@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-const baseUrl = "http://localhost:8080/";
+const baseUrl = "http://localhost:8080";
 
 export const getDecodedToken = () => {
   return jwtDecode(localStorage.getItem("token"));
@@ -16,7 +16,7 @@ export const getHeader = () => {
 
 export async function login(data) {
   try {
-    return await axios.post(baseUrl + "auth/login", data);
+    return await axios.post(baseUrl + "/auth/login", data);
   } catch (error) {
     console.log("Error while login", error);
   }
@@ -28,7 +28,7 @@ export function logout() {
 
 export async function getMenuTitles() {
   try {
-    return await axios.get(baseUrl + "menu-titles");
+    return await axios.get(baseUrl + "/menu-titles");
   } catch (error) {
     console.log("Error while getting menu titles", error);
   }
@@ -36,7 +36,7 @@ export async function getMenuTitles() {
 
 export async function addMenuTitle(data) {
   try {
-    await axios.post(baseUrl + "menu-titles", data, {
+    await axios.post(baseUrl + "/menu-titles", data, {
       headers: getHeader(),
     });
   } catch (error) {
@@ -46,7 +46,7 @@ export async function addMenuTitle(data) {
 
 export async function getMenuItems(menutitle) {
   try {
-    return await axios.get(baseUrl + `${menutitle}/menu-items`);
+    return await axios.get(baseUrl + `/${menutitle}/menu-items`);
   } catch (error) {
     console.log("Error while getting menu items : ", error);
   }
@@ -54,10 +54,21 @@ export async function getMenuItems(menutitle) {
 
 export async function addMenuItem(data) {
   try {
-    await axios.post(baseUrl + "menu-items", {
+    await axios.post(baseUrl + "/menu-items", {
       headers: getHeader(),
     });
   } catch (error) {
     console.log("Error while adding menu title : ", error);
+  }
+}
+
+export async function addOrderItem(orderItem) {
+  
+  try {
+    return axios.post(baseUrl + `/${orderItem}/order-item`, null, {
+      headers : getHeader()
+    });
+  } catch (error) {
+    console.log("error while adding orderItem : ", error);
   }
 }
