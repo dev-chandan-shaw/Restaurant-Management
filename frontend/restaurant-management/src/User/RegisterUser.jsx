@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 
 const RegisterUser = () => {
   const navigate = useNavigate()
+  const isLoggedIn = localStorage.getItem("isLoggedIn")
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,6 +23,9 @@ const RegisterUser = () => {
         .then(data => console.log(data))
     navigate("/")
   }
+  useEffect(() => {
+    if (isLoggedIn) navigate("/")
+  },[isLoggedIn])
   return (
     <div className='border-2 m-auto mt-10 rounded-sm py-3 p-10 w-[350px] shadow-lg'>
         <form onSubmit={handleSubmit}>

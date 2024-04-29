@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login as authLogin } from "../Store/authSlice";
@@ -7,6 +7,7 @@ import { login } from "../Backend/config";
 import { jwtDecode } from "jwt-decode";
 
 const LoginUser = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn")
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -31,6 +32,10 @@ const LoginUser = () => {
       navigate("/login")
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/")
+  },[isLoggedIn])
 
   return (
     <div className="m-auto my-10 p-10 border shadow-md w-[350px]">

@@ -16,7 +16,7 @@ const Home = () => {
     const token = localStorage.getItem('token');
     if (token) {
         const decoded_token = jwtDecode(token)
-        setRole(decoded_token.role.authority)
+        setRole(decoded_token?.role?.authority)
         const expirationTime = decoded_token.exp * 1000; 
         if (Date.now() > expirationTime) {
             localStorage.removeItem('token');
