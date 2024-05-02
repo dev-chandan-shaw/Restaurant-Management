@@ -14,7 +14,16 @@ export const getHeader = () => {
   };
 };
 
+export async function signup(data) {
+  try {
+    return await axios.post(baseUrl+"/auth/signup", data);
+  } catch (error) {
+    console.log("Error while signup : ", error);
+    throw error
+  }
+}
 export async function login(data) {
+  console.log(data);
   try {
     return await axios.post(baseUrl + "/auth/login", data);
   } catch (error) {
@@ -53,8 +62,9 @@ export async function getMenuItems(menutitle) {
 }
 
 export async function addMenuItem(data) {
+  console.log(data);
   try {
-    await axios.post(baseUrl + "/menu-items", {
+    await axios.post(baseUrl + "/menu-items", data, {
       headers: getHeader(),
     });
   } catch (error) {
@@ -65,10 +75,33 @@ export async function addMenuItem(data) {
 export async function addOrderItem(orderItem) {
   
   try {
-    return axios.post(baseUrl + `/${orderItem}/order-item`, null, {
+    return axios.post(baseUrl + `/order-item`, orderItem, {
       headers : getHeader()
     });
   } catch (error) {
     console.log("error while adding orderItem : ", error);
   }
 }
+
+export async function getCartItems() {
+  
+  try {
+    return axios.get(baseUrl+"/order-items", {
+      headers : getHeader()
+    })
+  } catch (error) {
+    throw error
+  }
+}
+export async function removeCartItem(orderItemId) {
+  console.log("orderItemId : ", orderItemId);
+  try {
+    return axios.delete(baseUrl+`/order-items/${orderItemId}`, {
+      headers : getHeader()
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+

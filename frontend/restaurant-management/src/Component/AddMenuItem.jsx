@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { addMenuItem, getDecodedToken } from "../Backend/config";
+import { addMenuItem, getDecodedToken, getMenuTitles } from "../Backend/config";
 
 function AddMenuItem() {
   const navigate = useNavigate();
+  
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState('')
   const [formData, setFormData] = useState({
@@ -25,6 +26,7 @@ function AddMenuItem() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addMenuItem(formData)
+    console.log();
     alert("Menu item added successfully")
     navigate("/")
   };
@@ -101,7 +103,7 @@ function AddMenuItem() {
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <Link
-            to="/"
+            to="/admin"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Cancel

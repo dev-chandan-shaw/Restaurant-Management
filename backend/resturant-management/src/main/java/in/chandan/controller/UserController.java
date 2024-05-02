@@ -2,8 +2,10 @@ package in.chandan.controller;
 import in.chandan.entity.Orders;
 import in.chandan.repository.OrdersRepository;
 import in.chandan.repository.UserInfoRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize; 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager; 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken; 
 import org.springframework.security.core.Authentication;
@@ -42,12 +44,14 @@ public class UserController {
 	} 
 
 	@PostMapping("/signup")
-	public String addNewUser(@RequestBody UserInfo userInfo) {
-		Orders orders = new Orders();
-		ordersRepository.save(orders);
-		userInfo.setOrders(orders);
+	public ResponseEntity<?> addNewUser(@RequestBody UserInfo userInfo) {
+
 		userInfo.setRoles("ROLE_USER");
-		return service.addUser(userInfo); 
+		if (userInfoRepository.findByEmail(userInfo.getEmail()).isPresent()) {
+			return ResponseEntity.badRequest().body("User already exist. Try login..");
+		}
+		service.addUser(userInfo);
+		return ResponseEntity.ok("User registered successfully.");
 	} 
 
 	@GetMapping("/user/userProfile") 
@@ -69,7 +73,8 @@ public class UserController {
 
 			UserInfo user = userInfoRepository.findByEmail(authRequest.getEmail()).orElseThrow();
 			String token = jwtService.generateToken(user.getEmail(), authentication.getAuthorities());
-			return Map.of("token", token , "userData", user);
+			System.out.println(user.getFirstName());
+			return Map.of("token", token, "name", user.getFirstName());
 		} else {
 			throw new UsernameNotFoundException("invalid user request !");
 		}

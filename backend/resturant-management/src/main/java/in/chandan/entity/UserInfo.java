@@ -6,11 +6,19 @@ public class UserInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id; 
-	private String name; 
+	private int id;
+
+	private String firstName;
+
+	private String lastName;
+	@Column(unique = true, nullable = false)
 	private String email; 
 	private String password; 
 	private String roles;
+
+	private String phone;
+
+	private String gender;
 
 	@OneToOne
 	@JoinColumn(name = "orders", referencedColumnName = "id")
@@ -20,12 +28,6 @@ public class UserInfo {
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	public String getEmail() {
 		return email;
@@ -58,12 +60,36 @@ public class UserInfo {
 		this.roles = "ROLE_USER";
 	}
 
-	@Override
-	public String toString() {
-		return "UserInfo{" +
-				"name='" + name + '\'' +
-				", email='" + email + '\'' +
-				", roles='" + roles + '\'' +
-				'}';
+	public String getPhone() {
+		return phone;
 	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 }

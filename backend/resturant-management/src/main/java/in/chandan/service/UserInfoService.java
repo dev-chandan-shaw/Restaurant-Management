@@ -1,8 +1,12 @@
 package in.chandan.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired; 
-import org.springframework.security.core.userdetails.UserDetails; 
+import in.chandan.entity.Orders;
+import in.chandan.repository.OrdersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService; 
 import org.springframework.security.core.userdetails.UsernameNotFoundException; 
 import org.springframework.security.crypto.password.PasswordEncoder; 
@@ -15,8 +19,11 @@ import in.chandan.repository.UserInfoRepository;
 import java.util.Optional; 
 
 @Service
+@EnableCaching
 public class UserInfoService implements UserDetailsService { 
 
+	@Autowired
+	OrdersRepository ordersRepository;
 	@Autowired
 	private UserInfoRepository repository; 
 
@@ -33,13 +40,19 @@ public class UserInfoService implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException("User not found " + username)); 
 	} 
 
-	public String addUser(UserInfo userInfo) { 
+	public void addUser(UserInfo userInfo) {
 		userInfo.setPassword(encoder.encode(userInfo.getPassword()));
+		Orders orders = new Orders();
+		ordersRepository.save(orders);
+		userInfo.setOrders(orders);
 		userInfo.setRoles("ROLE_USER");
-		System.out.println("My user is : " + userInfo.toString());
-		repository.save(userInfo); 
-		return "User Added Successfully"; 
-	} 
+		repository.save(userInfo);
+	}
+
+	@Cacheable(cacheNames = "user", key = "#email")
+	public UserInfo getCurrentUser(String email) {
+		return repository.findByEmail(email).get();
+	}
 
 } 
 

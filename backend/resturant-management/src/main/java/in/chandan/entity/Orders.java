@@ -1,5 +1,6 @@
 package in.chandan.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -11,8 +12,9 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
-    @JoinColumn(name = "order_item_id", referencedColumnName = "id")
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<OrderItems> orderItemsList;
 
     public Orders() {
