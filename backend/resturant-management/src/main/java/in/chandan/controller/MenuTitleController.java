@@ -33,9 +33,8 @@ public class MenuTitleController {
     }
 
     @GetMapping("/{title}/menu-items")
-    public List<MenuItems> getAllMenuItems(@PathVariable String title){
-        String title1 = title.replace("-", " ");
-        MenuTitle menuTitle = menuTitleRepository.findByTitleContaining(title1);
+    public List<MenuItems> getAllMenuItems(@PathVariable Long title){
+        MenuTitle menuTitle = menuTitleRepository.findById(title).orElseThrow();
         return menuTitle.getMenuItemsList();
     }
 }

@@ -45,8 +45,8 @@ public class UserController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> addNewUser(@RequestBody UserInfo userInfo) {
+		System.out.println("my first name is : " + userInfo.getFirstName());
 
-		userInfo.setRoles("ROLE_USER");
 		if (userInfoRepository.findByEmail(userInfo.getEmail()).isPresent()) {
 			return ResponseEntity.badRequest().body("User already exist. Try login..");
 		}
